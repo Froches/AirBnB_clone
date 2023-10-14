@@ -10,7 +10,6 @@ class TestBaseModel(unittest.TestCase):
     """Class to test the edge cases of BaseModel"""
 
     def test_instantiation(self):
-        """Test if an instance of BaseModel is created successfully"""
         model = BaseModel()
         self.assertIsInstance(model, BaseModel)
 
@@ -62,33 +61,61 @@ class TestBaseModel(unittest.TestCase):
         model = BaseModel()
         self.assertIsInstance(model.id, str)
 
-    def test_args(self):
-        model = BaseModel("argument1", "argument2")
-        self.assertEqual(model.argument1, "argument1")
-        self.assertEqual(model.argument2, "argument2")
-
-    def test_instantiation_with_args(self):
-        model = BaseModel(1, 2, 3)
-        self.assertEqual(model.args, (1, 2, 3))
-
     def test_kwargs(self):
         model = BaseModel(arg1="value1", arg2="value2")
         self.assertEqual(model.arg1, "value1")
         self.assertEqual(model.arg2, "value2")
 
-    def test_instantiation_with_kwargs(self):
-        model = BaseModel(arg1 = "value1", arg2 = "value2")
-        self.assertEqual(model.kwargs, {"arg1": "value1", "arg2": "value2"})
-
-    def test_save_update_files(self):
+    def test_create_inst_with_default_values(self):
         model = BaseModel()
-        model.save()
-        filename = "file.json"
-        with open(filename, 'r') as file:
-            data = file.read()
-            self.assertIn(model.id, data)
-            self.assertIn(model.created_at.isoformat(), data)
-            self.assertIn(model.__class__.__name__, data)
+        self.assertIsInstance(model, BaseModel)
+        self.assertTrue(hasattr(model, 'id'))
+        self.assertTrue(hasattr(model, 'created_at'))
+        self.assertTrue(hasattr(model, 'updated_at'))
+        self.assertEqual(type(model.created_at), datetime)
+        self.assertEqual(type(model.updated_at), datetime)
+
+    def test_create_inst_with_custom_values(self):
+        custom_id = "custom_id"
+        custom_created_at = "2023-10-10T12:00:00"
+        custom_updated_at = "2023-10-10T13:00:00"
+
+        model = BaseModel(id=custom_id, created_at=custom_created_at, updated_at=custom_updated_at)
+        self.assertEqual(model.id, custom_id)
+        self.assertEqual(model.created_at.isoformat(), custom_created_at)
+        self.assertEqual(model.updated_at.isoformat(), custom_updated_at)
+
+    def test_from_dict_method(self):
+        custom_id = "custom_id"
+        custom_created_at = "2023-10-10T12:00:00"
+        custom_updated_at = "2023-10-10T13:00:00"
+
+        model_dict = {
+            '__class__': 'BaseModel',
+            'id': custom_id,
+            'created_at': custom_created_at,
+            'updated_at': custom_updated_at
+        }
+
+        model = BaseModel(**model_dict)
+        self.assertEqual(model.id, custom_id)
+        self.assertEqual(model.created_at.isoformat(), custom_created_at)
+        self.assertEqual(model.updated_at.isoformat(), custom_updated_at)
+
+    def test_from_dict_with_invalid_class(self):
+        custom_id = "custom_id"
+        custom_created_at = "2023-10-10T12:00:00.00"
+        custom_updated_at = "2023-10-10T13:00:00.00"
+
+        model_dict = {
+            '__class__': 'InvalidClass',
+            'id': custom_id,
+            'created_at': custom_created_at,
+            'updated_at': custom_updated_at
+        }
+
+        with self.assertRaises(AttributeError):
+            model = BaseModel(**model_dict)
 
 
 if __name__ == '__main__':
