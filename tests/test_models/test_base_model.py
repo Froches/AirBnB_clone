@@ -18,7 +18,10 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(model.id, str)
 
     def test_unique_id(self):
-        """Testif he UUIDs generated for different instances of BaseModel are unique"""
+        """
+        Test if the UUIDs generated for different
+        instances of BaseModel are unique
+        """
         model1 = BaseModel()
         model2 = BaseModel()
         self.assertNotEqual(model1.id, model2.id)
@@ -48,8 +51,10 @@ class TestBaseModel(unittest.TestCase):
         model_dict = model.to_dict()
         self.assertTrue(isinstance(model_dict, dict))
         self.assertEqual(model_dict['id'], model.id)
-        self.assertEqual(model_dict['created_at'], model.created_at.isoformat())
-        self.assertEqual(model_dict['updated_at'], model.updated_at.isoformat())
+        self.assertEqual(model_dict['created_at'],
+                         model.created_at.isoformat())
+        self.assertEqual(model_dict['updated_at'],
+                         model.updated_at.isoformat())
         self.assertEqual(model_dict['__class__'], "BaseModel")
 
     def test_iso_format(self):
@@ -80,7 +85,9 @@ class TestBaseModel(unittest.TestCase):
         custom_created_at = "2023-10-10T12:00:00"
         custom_updated_at = "2023-10-10T13:00:00"
 
-        model = BaseModel(id=custom_id, created_at=custom_created_at, updated_at=custom_updated_at)
+        model = BaseModel(id=custom_id,
+                          created_at=custom_created_at,
+                          updated_at=custom_updated_at)
         self.assertEqual(model.id, custom_id)
         self.assertEqual(model.created_at.isoformat(), custom_created_at)
         self.assertEqual(model.updated_at.isoformat(), custom_updated_at)
