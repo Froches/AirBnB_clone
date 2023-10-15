@@ -9,7 +9,8 @@ class BaseModel:
     """Base model class. Parent of all other subclasses"""
 
     def __init__(self, *args, **kwargs):
-        """Initializes T=the BaseModel class"""
+        """Initializes the BaseModel class"""
+
         if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
