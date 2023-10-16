@@ -1,3 +1,1 @@
 
-storage = FileStorage()
-storage.reload()
