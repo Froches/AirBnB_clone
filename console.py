@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """The Console file for AirBnB"""
 import cmd
-from models import storage
 from models.base_model import BaseModel
 
 class HBNBCommand(cmd.Cmd):
