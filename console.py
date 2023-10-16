@@ -21,13 +21,28 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """Creates a new instance of BaseModel"""
+        """
+        Creates a new instance of BaseModel, User,
+        State, City, Amenity, Place, or Review"""
         if not arg:
             print("** class name missing **")
-        elif arg != 'BaseModel':
+        elif arg not in ['BaseModel', 'User', 'State', 'City', 'Amenity', 'Place', 'Review']:
             print("** class doesn't exist **")
         else:
-            new_instance = BaseModel()
+            if arg == 'BaseModel':
+                new_instance = BaseModel()
+            elif arg == 'User':
+                new_instance = User()
+            elif arg == 'State':
+                new_instance = State()
+            elif arg == 'City':
+                new_instance = City()
+            elif arg == 'Amenity':
+                new_instance = Amenity()
+            elif arg == 'Place':
+                new_instance = Place()
+            elif arg == 'Review':
+                new_instance = Review()
             new_instance.save()
             print(new_instance.id)
 
@@ -36,7 +51,7 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split()
         if len(args) == 0:
             print("** class name missing **")
-        elif args[0] != 'BaseModel':
+        elif args[0] not in ['BaseModel', 'User', 'State', 'City', 'Amenity', 'Place', 'Review']:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
@@ -48,11 +63,11 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def do_destroy(self, arg):
-        """Deletes an instance"""
+        'Deletes an instance'
         args = arg.split()
         if len(args) == 0:
             print("** class name missing **")
-        elif args[0] != 'BaseModel':
+        elif args[0] not in ['BaseModel', 'User', 'State', 'City', 'Amenity', 'Place', 'Review']:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
@@ -77,6 +92,8 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split()
         if len(args) == 0:
             print("** class name missing **")
+        elif args[0] not in ['BaseModel', 'User', 'State', 'City', 'Amenity', 'Place', 'Review']:
+            print("** class doesn't exist **")
         elif args[0] != 'BaseModel':
             print("** class doesn't exist **")
         elif len(args) == 1:
