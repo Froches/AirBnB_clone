@@ -35,20 +35,23 @@ class FileStorage():
     def reload(self):
         """Reloads saved instances"""
         if os.path.exists(self.__file_path):
-            with open(self.__file_path, 'r') as f:
-                objs = json.load(f)
-            for key, obj in objs.items():
-                if obj['__class__'] == 'BaseModel':
-                    self.__objects[key] = BaseModel(**obj)
-                elif obj['__class__'] == 'User':
-                    self.__objects[key] = User(**obj)
-                elif obj['__class__'] == 'State':
-                    self.__objects[key] = State(**obj)
-                elif obj['__class__'] == 'City':
-                    self.__objects[key] = City(**obj)
-                elif obj['__class__'] == 'Amenity':
-                    self.__objects[key] = Amenity(**obj)
-                elif obj['__class__'] == 'Place':
-                    self.__objects[key] = Place(**obj)
-                elif obj['__class__'] == 'Review':
-                    self.__objects[key] = Review(**obj)
+            try:
+                with open(self.__file_path, 'r') as f:
+                    objs = json.load(f)
+                for key, obj in objs.items():
+                    if obj['__class__'] == 'BaseModel':
+                        self.__objects[key] = BaseModel(**obj)
+                    elif obj['__class__'] == 'User':
+                        self.__objects[key] = User(**obj)
+                    elif obj['__class__'] == 'State':
+                        self.__objects[key] = State(**obj)
+                    elif obj['__class__'] == 'City':
+                        self.__objects[key] = City(**obj)
+                    elif obj['__class__'] == 'Amenity':
+                        self.__objects[key] = Amenity(**obj)
+                    elif obj['__class__'] == 'Place':
+                        self.__objects[key] = Place(**obj)
+                    elif obj['__class__'] == 'Review':
+                        self.__objects[key] = Review(**obj)
+            except FileNotFoundError:
+            pass

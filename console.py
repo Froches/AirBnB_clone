@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """The Console file for AirBnB"""
 import cmd
-from models.base_model import BaseModel
+import models
+
 
 class HBNBCommand(cmd.Cmd):
     """The prompt"""
