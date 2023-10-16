@@ -3,6 +3,11 @@
 import cmd
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -10,20 +15,20 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
 
-    def quit(self, arg):
+    def do_quit(self, arg):
         """Quit the command interpreter"""
         return True
 
-    def EOF(self, arg):
+    def do_EOF(self, arg):
         """Exit on EOF(Ctrl-D)"""
         print()
         return True
 
-    def emptyline(self):
+    def do_emptyline(self):
         """Empty command - do nothing"""
         pass
 
-    def create(self, arg):
+    def do_create(self, arg):
         """Creates new instance"""
         if not arg:
             print("** class name missing **")
@@ -40,7 +45,7 @@ class HBNBCommand(cmd.Cmd):
             except NameError:
                 print("** class doesn't exist **")
 
-    def show(self, arg):
+    def do_show(self, arg):
         """Print string representation of an instance"""
         args = arg.split()
         if not arg:
@@ -57,7 +62,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
-    def destroy(self, arg):
+    def do_destroy(self, arg):
         """Delete an instance based on class name and id"""
         args = arg.split()
         if not arg:
@@ -75,7 +80,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
-    def all(self, arg):
+    def do_all(self, arg):
         """Prints all string representation of all instances"""
         args = arg.split()
         models_storage = BaseModel.load()
@@ -85,7 +90,7 @@ class HBNBCommand(cmd.Cmd):
         elif args[0] not in ["BaseModel"]:
             print("** class doesn't exist **")
 
-    def update(self, arg):
+    def do_update(self, arg):
         """Update an instance based on class name and id"""
         args = arg.split()
         if not arg:
