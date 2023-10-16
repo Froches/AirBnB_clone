@@ -12,7 +12,6 @@ class FileStorage():
     """The file storage class"""
     __file_path = "file.json"
     __objects = {}
-    __classes
 
     def all(self):
         return FileStorage.__objects

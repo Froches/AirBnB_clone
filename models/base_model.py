@@ -13,10 +13,11 @@ class BaseModel:
 
         if kwargs:
             for key, value in kwargs.items():
-                if key != '__class__':
+                if key == 'created_at' or key == 'updated_at':
+                    setattr(self, key, datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
+                else:
                     setattr(self, key, value)
-            self.created_at = datetime.fromisoformat(self.created_at)
-            self.updated_at = datetime.fromisoformat(self.updated_at)
+            storage.new(self)
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
@@ -30,6 +31,7 @@ class BaseModel:
     def save(self):
         """Update public inst attr 'updated_at' with current datetime"""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """Returns a dictionary containing all key/values of instance"""

@@ -1,15 +1,20 @@
+#!/usr/bin/python3
+"""Command interpreter for AirBnB project"""
 import cmd
 from models.base_model import BaseModel
 from models.user import User
 
+
 class HBNBCommand(cmd.Cmd):
+    """AirBnB console file"""
+
     prompt = "(hbnb) "
 
-    def do_quit(self, arg):
+    def quit(self, arg):
         """Quit the command interpreter"""
         return True
 
-    def do_EOF(self, arg):
+    def EOF(self, arg):
         """Exit on EOF(Ctrl-D)"""
         print()
         return True
@@ -18,7 +23,8 @@ class HBNBCommand(cmd.Cmd):
         """Empty command - do nothing"""
         pass
 
-    def do_create(self, arg):
+    def create(self, arg):
+        """Creates new instance"""
         if not arg:
             print("** class name missing **")
         elif arg not in ["BaseModel", "User"]:
@@ -27,14 +33,14 @@ class HBNBCommand(cmd.Cmd):
             try:
                 if arg == "BaseModel":
                     new_instance = BaseModel()
-            else:
+                else:
                     new_insstance = User()
                 new_instance.save()
                 print(new_instance.id)
             except NameError:
                 print("** class doesn't exist **")
 
-    def do_show(self, arg):
+    def show(self, arg):
         """Print string representation of an instance"""
         args = arg.split()
         if not arg:
@@ -51,7 +57,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
-    def do_destroy(self, arg):
+    def destroy(self, arg):
         """Delete an instance based on class name and id"""
         args = arg.split()
         if not arg:
@@ -69,7 +75,8 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
-    def do_all(self, arg):
+    def all(self, arg):
+        """Prints all string representation of all instances"""
         args = arg.split()
         models_storage = BaseModel.load()
         if not arg:
@@ -78,7 +85,7 @@ class HBNBCommand(cmd.Cmd):
         elif args[0] not in ["BaseModel"]:
             print("** class doesn't exist **")
 
-    def do_update(self, arg):
+    def update(self, arg):
         """Update an instance based on class name and id"""
         args = arg.split()
         if not arg:
