@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """The Console file for AirBnB"""
 import cmd
-import models
+import models *
 
 
 class HBNBCommand(cmd.Cmd):
