@@ -3,39 +3,66 @@
 Class thet serializes instances to a JSON file and deserializes JSON
 files to instances
 """
+
+
 import json
+import os
 import sys
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class FileStorage():
-    """The file storage class"""
+    """
+    The file storage class that serializes instances to a JSON file
+    and deserializes JSON files to instances
+    """
+
     __file_path = "file.json"
     __objects = {}
-    __classes
+    __classes = {
+            "BaseModel": BaseModel,
+            "User": User,
+            "State": State,
+            "City": City,
+            "Amenity": Amenity,
+            "Place": Place,
+            "Review": Review
+            }
+
+    def __init__(self):
+        """To initialize the class"""
+        pass
 
     def all(self):
-        return FileStorage.__objects
+        """Returns all instances"""
+        return self.__objects
 
     def new(self, obj):
-        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        FileStorage.__objects[key] = obj
+        """Creates new instance"""
+        key = f"{obj.__class__.__name__}.{obj.id}"
+        self.__objects[key] = obj
 
     def save(self):
-        obj_dict = {key: obj.to_dict() for key,
-                    obj in FileStorage.__objects.items()}
-        with open(self.__file_path, 'w') as json_file:
-            json.dump(obj_dict, json_file)
+        """Saves created instances"""
+        with open(self.__file_path, 'w') as f:
+            json.dump({key: obj.to_dict() for key,
+                      obj in self.__objects.items()}, f)
 
     def reload(self):
-        try:
-            with open(FileStorage.__file_path, 'r') as json_file:
-                data = json.load(json_file)
-                for key, obj_data in data.items():
-                    cls_name, obj_id = key.split(".")
-                    cls = FileStorage.__classes.get(cls_name)
-                    if cls:
-                        obj_inst = cls(**obj_data)
-                        FileStorage.__objects[key] = obj_inst
-        except (FileNotFoundError, json.JSONDecodeError):
-            pass
+        """Reloads saved instances"""
+        if os.path.exists(self.__file_path):
+            try:
+                with open(self.__file_path, 'r') as f:
+                    objs = json.load(f)
+                    for key, obj in objs.items():
+                        cls = key.split(".")[0]
+                        obj_instance = self.__classes.get(cls)(**obj)
+                        self.__objects[key] = obj_instance
+            except FileNotFoundError:
+                pass
