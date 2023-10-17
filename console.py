@@ -2,6 +2,7 @@
 """The Console file for AirBnB"""
 import cmd
 import models
+from models.base_model import BaseModel
 
 
 class HBNBCommand(cmd.Cmd):
@@ -57,7 +58,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             key = f"{args[0]}.{args[1]}"
-            if key in storage.all().keys():
+            if key in models.storage.all().keys():
                 print(storage.all()[key])
             else:
                 print("** no instance found **")
@@ -84,7 +85,7 @@ class HBNBCommand(cmd.Cmd):
         if arg != 'BaseModel' and len(arg) > 0:
             print("** class doesn't exist **")
         else:
-            for value in storage.all().values():
+            for value in models.storage.all().values():
                 print(value)
 
     def do_update(self, arg):
@@ -100,7 +101,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             key = f"{args[0]}.{args[1]}"
-            if key not in storage.all().keys():
+            if key not in models.storage.all().keys():
                 print("** no instance found **")
             elif len(args) == 2:
                 print("** attribute name missing **")

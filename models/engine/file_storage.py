@@ -3,8 +3,12 @@
 Class thet serializes instances to a JSON file and deserializes JSON
 files to instances
 """
+
+
 import json
+import os
 import sys
+from models.base_model import BaseModel
 from models.user import User
 from models.state import State
 from models.city import City
@@ -14,9 +18,26 @@ from models.review import Review
 
 
 class FileStorage():
-    """The file storage class"""
+    """
+    The file storage class that serializes instances to a JSON file
+    and deserializes JSON files to instances
+    """
+
     __file_path = "file.json"
     __objects = {}
+    __classes = {
+            "BaseModel": BaseModel,
+            "User": User,
+            "State": State,
+            "City": City,
+            "Amenity": Amenity,
+            "Place": Place,
+            "Review": Review
+            }
+
+    def __init__(self):
+        """To initialize the class"""
+        pass
 
     def all(self):
         """Returns all instances"""
@@ -30,7 +51,8 @@ class FileStorage():
     def save(self):
         """Saves created instances"""
         with open(self.__file_path, 'w') as f:
-            json.dump({key: obj.to_dict() for key, obj in self.__objects.items()}, f)
+            json.dump({key: obj.to_dict() for key,
+                      obj in self.__objects.items()}, f)
 
     def reload(self):
         """Reloads saved instances"""
@@ -38,20 +60,9 @@ class FileStorage():
             try:
                 with open(self.__file_path, 'r') as f:
                     objs = json.load(f)
-                for key, obj in objs.items():
-                    if obj['__class__'] == 'BaseModel':
-                        self.__objects[key] = BaseModel(**obj)
-                    elif obj['__class__'] == 'User':
-                        self.__objects[key] = User(**obj)
-                    elif obj['__class__'] == 'State':
-                        self.__objects[key] = State(**obj)
-                    elif obj['__class__'] == 'City':
-                        self.__objects[key] = City(**obj)
-                    elif obj['__class__'] == 'Amenity':
-                        self.__objects[key] = Amenity(**obj)
-                    elif obj['__class__'] == 'Place':
-                        self.__objects[key] = Place(**obj)
-                    elif obj['__class__'] == 'Review':
-                        self.__objects[key] = Review(**obj)
+                    for key, obj in objs.items():
+                        cls = key.split(".")[0]
+                        obj_instance = self.__classes.get(cls)(**obj)
+                        self.__objects[key] = obj_instance
             except FileNotFoundError:
-            pass
+                pass
