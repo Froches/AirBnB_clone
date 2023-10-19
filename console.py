@@ -1,8 +1,15 @@
 #!/usr/bin/python3
 """The Console file for AirBnB"""
 import cmd
-import models
+import sys
+from models import storage
 from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.city import City
+from models.state import State
+from models.review import Review
+from models.amenity import Amenity
 
 
 class HBNBCommand(cmd.Cmd):
