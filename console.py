@@ -123,6 +123,20 @@ class HBNBCommand(cmd.Cmd):
                 setattr(storage.all()[key], args[2], args[3])
                 storage.all()[key].save()
 
+    def default(self, line):
+        """
+        Method called on an input line when
+        the command prefix is not recognized.
+        """
+        if len(line.split(".")) != 2:
+            print("*** Unknown syntax: {}".format(line))
+            return
+        args = line.split(".")
+        class_name = args[0]
+        command = args[1]
+        if command == "all()":
+            self.do_all(class_name)
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
