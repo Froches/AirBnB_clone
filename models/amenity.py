@@ -1,9 +1,9 @@
 #!/usr/bin/python3
+"""The class for Amenity"""
+import models
 from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    """Amenity class thats inherits from BaseModel"""
-    def__init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.name = ""
+    """This is the Amenity class that inherits from BaseModel class"""
+    name = ""
