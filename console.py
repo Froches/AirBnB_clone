@@ -1,118 +1,119 @@
+#!/usr/bin/python3
+"""The Console file for AirBnB"""
 import cmd
+import models
 from models.base_model import BaseModel
-from models.user import User
+
 
 class HBNBCommand(cmd.Cmd):
+    """The prompt"""
     prompt = "(hbnb) "
 
     def do_quit(self, arg):
-        """Quit the command interpreter"""
+        """Quit command to exit the program"""
         return True
 
     def do_EOF(self, arg):
-        """Exit on EOF(Ctrl-D)"""
-        print()
+        """EOF command to exit the program"""
         return True
 
     def emptyline(self):
-        """Empty command - do nothing"""
+        """An empty line + ENTER shouldn’t execute anything"""
         pass
 
     def do_create(self, arg):
+        """
+        Creates a new instance of BaseModel, User,
+        State, City, Amenity, Place, or Review"""
         if not arg:
             print("** class name missing **")
-        elif arg not in ["BaseModel", "User"]:
+        elif arg not in ['BaseModel', 'User', 'State',
+                         'City', 'Amenity', 'Place', 'Review']:
             print("** class doesn't exist **")
         else:
-            try:
-                if arg == "BaseModel":
-                    new_instance = BaseModel()
-            else:
-                    new_insstance = User()
-                new_instance.save()
-                print(new_instance.id)
-            except NameError:
-                print("** class doesn't exist **")
+            if arg == 'BaseModel':
+                new_instance = BaseModel()
+            elif arg == 'User':
+                new_instance = User()
+            elif arg == 'State':
+                new_instance = State()
+            elif arg == 'City':
+                new_instance = City()
+            elif arg == 'Amenity':
+                new_instance = Amenity()
+            elif arg == 'Place':
+                new_instance = Place()
+            elif arg == 'Review':
+                new_instance = Review()
+            new_instance.save()
+            print(new_instance.id)
 
     def do_show(self, arg):
-        """Print string representation of an instance"""
+        """Prints the string representation of an instance"""
         args = arg.split()
-        if not arg:
+        if len(args) == 0:
             print("** class name missing **")
-        elif args[0] not in ["BaseModel", "User"]:
+        elif args[0] not in ['BaseModel', 'User', 'State',
+                             'City', 'Amenity', 'Place', 'Review']:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
         else:
-            models_storage = BaseModel.load()
-            key = "{}.{}".format(args[0], args[1])
-            if key in models_storage:
-                print(models_storage[key])
+            key = f"{args[0]}.{args[1]}"
+            if key in models.storage.all().keys():
+                print(storage.all()[key])
             else:
                 print("** no instance found **")
 
     def do_destroy(self, arg):
-        """Delete an instance based on class name and id"""
+        'Deletes an instance'
         args = arg.split()
-        if not arg:
+        if len(args) == 0:
             print("** class name missing **")
-        elif args[0] not in ["BaseModel", "User"]:
+        elif args[0] not in ['BaseModel', 'User', 'State',
+                             'City', 'Amenity', 'Place', 'Review']:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
         else:
-            models_storage = BaseModel.load()
-            key = "{}.{}".format(args[0], args[1])
-            if key in models_storage:
-                del models_storage[key]
-                BaseModel.save(models_storage)
+            key = f"{args[0]}.{args[1]}"
+            if key in storage.all().keys():
+                del storage.all()[key]
+                storage.save()
             else:
                 print("** no instance found **")
 
     def do_all(self, arg):
-        args = arg.split()
-        models_storage = BaseModel.load()
-        if not arg:
-            for key in models_storage:
-                print(models_storage[key])
-        elif args[0] not in ["BaseModel"]:
+        """Prints all instances"""
+        if arg != 'BaseModel' and len(arg) > 0:
             print("** class doesn't exist **")
+        else:
+            for value in models.storage.all().values():
+                print(value)
 
     def do_update(self, arg):
-        """Update an instance based on class name and id"""
+        """Updates an instance"""
         args = arg.split()
-        if not arg:
+        if len(args) == 0:
             print("** class name missing **")
-        elif args[0] not in ["BaseModel"]:
+        elif args[0] not in ['BaseModel', 'User', 'State',
+                             'City', 'Amenity', 'Place', 'Review']:
             print("** class doesn't exist **")
-        elif len(args) < 2:
+        elif args[0] != 'BaseModel':
+            print("** class doesn't exist **")
+        elif len(args) == 1:
             print("** instance id missing **")
-        elif len(args) < 3:
-            print("** attributes name missing **")
-        elif len(args) < 4:
-            print("** value missing **")
         else:
-            models_storage = BaseModel.load()
-            key = "{}.{}".format(args[0], args[1])
-            if key in models_storage:
-                obj = models_storage[key]
-                attribute_name = args[2]
-                attribute_value = args[3]
-
-                if hasattr(obj, attribute_name):
-                    attribute_type = type(getattr(obj, attribute_name))
-                    if attribute_type is str:
-                        attribute_value = attribute_value.strip('"')
-                    elif attribute_type is int:
-                        attribute_value = int(attribute_value)
-                    elif attribute_value is float:
-                        attribute_value = float(attribute_value)
-                    setattr(obj, attribute_name, attribute_value)
-                    obj.save()
-                else:
-                    print("** attribute name doesn't exist **")
-            else:
+            key = f"{args[0]}.{args[1]}"
+            if key not in models.storage.all().keys():
                 print("** no instance found **")
+            elif len(args) == 2:
+                print("** attribute name missing **")
+            elif len(args) == 3:
+                print("** value missing **")
+            else:
+                setattr(storage.all()[key], args[2], args[3])
+                storage.all()[key].save()
 
 
 if __name__ == '__main__':
