@@ -32,7 +32,9 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, arg):
         """
         Creates a new instance of BaseModel, User,
-        State, City, Amenity, Place, or Review"""
+        State, City, Amenity, Place, or Review
+        Usage: create <class_name>
+        """
         if not arg:
             print("** class name missing **")
         elif arg not in ['BaseModel', 'User', 'State',
@@ -57,7 +59,10 @@ class HBNBCommand(cmd.Cmd):
             print(new_instance.id)
 
     def do_show(self, arg):
-        """Prints the string representation of an instance"""
+        """
+        Prints the string representation of an instance
+        Usage: show <class_name> <instance_id>
+        """
         args = arg.split()
         if len(args) == 0:
             print("** class name missing **")
@@ -74,7 +79,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def do_destroy(self, arg):
-        'Deletes an instance'
+        """Deletes an instance"""
         args = arg.split()
         if len(args) == 0:
             print("** class name missing **")
@@ -136,6 +141,8 @@ class HBNBCommand(cmd.Cmd):
         command = args[1]
         if command == "all()":
             self.do_all(class_name)
+        else:
+            print("*** Unknown syntax: {}".format(line))
 
 
 if __name__ == '__main__':

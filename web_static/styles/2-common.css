@@ -1,7 +1,0 @@
-body {
-  margin: 0;
-  padding: 0;
-}
-div {
-  min-height: calc(100vh - 130px);
-}
